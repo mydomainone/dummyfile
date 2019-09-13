@@ -1,0 +1,50 @@
+pipeline {
+         agent any
+                stage('One') {
+                        steps {
+                                echo 'Hi, this is imran from zendrive'
+
+                        }
+                }
+                stage('two') {
+                        steps {
+                                input('Do you want to proceed?')
+                        }
+
+                }
+                stage('Three') {
+                         when {
+                                not {
+                                      branch "master"
+                                 }
+                                }
+                         }
+                         steps {
+                                 echo "Hello"
+
+                         }
+                }
+                stage('Four') {
+                               parallel {
+                                    stage('unit Test') {
+                                                     steps {
+                                                        echo "Running the Unit Test..."
+                                                     }
+                                    }
+                                    stage('integration Test') {
+                                                       agent {
+                                                             docker {
+                                                                      reuseNode false
+                                                                      image 'ubuntu'
+
+                                                             }
+                                                       }
+                                                       steps {
+                                                               echo 'Running the integration test...'
+                                                       }
+                                    }
+                               }
+}
+}
+}
+}
